@@ -244,7 +244,7 @@ public class Relation {
 
     public Relation rename(ArrayList<String> cnames){
       ArrayList<String> attrs = new ArrayList<String>();
-      ArrayList<String> doms = new ArrayList<String();
+      ArrayList<String> doms = new ArrayList<String>();
       for(int i = 0; i < cnames.size(); i++){
         attrs.add(cnames.get(i));
       }
@@ -264,10 +264,35 @@ public class Relation {
 
     public Relation times(Relation r2){
       ArrayList<String> attrs = new ArrayList<String>();
-      ArrayList<String> doms = new ArrayList<String();
+      ArrayList<String> doms = new ArrayList<String>();
       for(int i = 0 ; i < this.attributes.size(); i++){
+        if(this.attributes.indexOf(r2.attributes.get(i)) != -1)
+          attrs.add(this.name + "." + this.attributes.get(i));
+         else
         attrs.add(this.attributes.get(i));
-      }
-    }
 
+        doms.add(this.domains.get(i));
+      }
+
+      for(int i = 0 ; i < this.attributes.size(); i++){
+        if(this.attributes.indexOf(r2.attributes.get(i)) != -1)
+          attrs.add(r2.name + "." + r2.attributes.get(i));
+         else
+        attrs.add(this.attributes.get(i));
+
+        doms.add(r2.domains.get(i));
+      }
+      String name = "";
+      String relName = this.name + "TIMES" + r2.name;
+      Relation newRel = new Relation(relName, attrs, doms);
+
+      for(int i = 0; i < this.table.size(); i++){
+        for(int j = 0; j < r2.table.size(); j++){
+          newRel.addTuple(this.table.get(i).concatenate(r2.table.get(j),attrs, doms));
+        }
+      }
+
+      return newRel;
+
+  }
 }
