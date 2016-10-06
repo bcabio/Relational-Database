@@ -2,9 +2,9 @@ import java.util.*;
 
 public class Tuple {
 
-  private ArrayList<String> attributes;
-  private ArrayList<String> domains;
-  private ArrayList<Comparable> tuple;
+  private ArrayList<String> attributes; //column name
+  private ArrayList<String> domains; //column type
+  private ArrayList<Comparable> tuple; //column content
 
   // METHODS
 
@@ -100,6 +100,20 @@ public class Tuple {
       tempTuple.tuple.add(t2.tuple.get(j));
     }
     System.out.println(tempTuple);
+    return tempTuple;
+  }
+
+  public Tuple project(ArrayList<String> cnames){
+    ArrayList<String> attr = cnames;
+    ArrayList<String> doms = new ArrayList<String>();
+    for(int i = 0; i < cnames.size(); i++){
+        doms.add(this.attributes.get(this.attributes.indexOf(cnames.get(i))));
+    }
+    Tuple tempTuple = new Tuple(doms, attr);
+    for(int i = 0; i < cnames.size(); i++){
+      tempTuple.tuple.add(this.tuple.get(this.attributes.indexOf(cnames.get(i))));
+    }
+    //System.out.println(tempTuple);
     return tempTuple;
   }
 

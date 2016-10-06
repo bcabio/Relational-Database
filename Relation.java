@@ -295,4 +295,29 @@ public class Relation {
       return newRel;
 
   }
+
+  public Relation project(ArrayList<String> cnames){
+    ArrayList<String> attr = cnames;
+    System.out.println(cnames);
+    ArrayList<String> doms = new ArrayList<String>();
+
+    for(int i = 0; i < cnames.size(); i++){
+      doms.add(this.domains.get(this.attributes.indexOf(cnames.get(i))));
+    }
+    String name = "PROJECT";
+    for(int i = 0; i < cnames.size(); i++){
+      name += "_";
+      name += cnames.get(i);
+    }
+    Relation rel = new Relation(name, attr, doms);
+
+    for(Tuple t : this.table){
+      rel.table.add(t.project(cnames));
+    //  System.out.println(rel.table);
+    }
+    rel.removeDuplicates();
+    return rel;
+  }
+
+
 }
