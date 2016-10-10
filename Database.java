@@ -21,7 +21,7 @@ public class Database {
       relations.put(rname, r);
       return true;
     } else {
-    return false;
+      return false;
     }
   }
   // Delete relation with name rname from HashMap
@@ -31,7 +31,7 @@ public class Database {
       relations.remove(rname);
       return true;
     } else {
-    return false;
+      return false;
     }
   }
   // Return true if relation with name rname exists in HashMap
@@ -92,12 +92,12 @@ public class Database {
           Tuple tuple = new Tuple(attributes, domains);
           for(int n = 0; n < attributes.size(); n++){
             if(domains.get(n).equals("INTEGER"))
-              tuple.addIntegerComponent(Integer.parseInt(buff.readLine()));
-                else if(domains.get(n).equals("VARCHAR"))
-                  tuple.addStringComponent(buff.readLine());
-                  else if(domains.get(n).equals("DECIMAL"))
-                    tuple.addDoubleComponent(Double.parseDouble(buff.readLine()));
-                      else System.out.println("Error");
+            tuple.addIntegerComponent(Integer.parseInt(buff.readLine()));
+            else if(domains.get(n).equals("VARCHAR"))
+            tuple.addStringComponent(buff.readLine());
+            else if(domains.get(n).equals("DECIMAL"))
+            tuple.addDoubleComponent(Double.parseDouble(buff.readLine()));
+            else System.out.println("Error");
           }
           tempRel.addTuple(tuple);
         }
@@ -106,12 +106,12 @@ public class Database {
 
 
 
-        }
+      }
 
       fin1.close();
     } catch (IOException e) {
-        System.out.println("Error reading file");
-      }
+      System.out.println("Error reading file");
     }
+  }
 
 }

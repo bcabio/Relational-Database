@@ -46,7 +46,7 @@ public class Relation {
     for(int i = 0; i < attributes.size(); i++){
       System.out.print(attributes.get(i) + ":" + domains.get(i));
       if(i != attributes.size()-1)
-        System.out.print(",");
+      System.out.print(",");
     }
   }
 
@@ -78,7 +78,7 @@ public class Relation {
   public String toString() {
     String s = "";
     s += name + "(";
-  //System.out.println(this.attributes.size());
+    //System.out.println(this.attributes.size());
     for(int w = 0; w < attributes.size(); w++){
       s += attributes.get(w) + ":" + domains.get(w);
       //System.out.println(attributes.get(w) + ":" + domains.get(w));
@@ -102,197 +102,197 @@ public class Relation {
         if(this.table.get(i).equals(this.table.get(j))){
           this.table.remove(j);
           j--;
-          }
+        }
+      }
+    }
+  }
+
+  public boolean member(Tuple t){
+    for(int i = 0; i < this.table.size(); i++){
+      if(t.equals(this.table.get(i))){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public Relation union(Relation r2){
+    ArrayList<String> tempDomains = this.domains;
+    ArrayList<String> tempAttributes = this.attributes;
+    ArrayList<Tuple> tempTable = new ArrayList<Tuple>();
+
+    //iterate over the first relation and add clone
+    //of tuple to the tempTable
+    for(int w = 0; w < this.table.size(); w++){
+      tempTable.add(this.table.get(w).clone(this.attributes));
+    }
+
+    //iterate over the second relation and add clone of
+    //tuple to the tempTable
+    for(int w = 0; w < r2.table.size(); w++){
+      tempTable.add(r2.table.get(w).clone(this.attributes));
+    }
+
+    //Name of the new table
+    String unionName = this.name + "_UNION_" + r2.name;
+
+    //calling relation
+    Relation tempRelation = new Relation(unionName, tempAttributes,tempDomains);
+
+    //add tuples to relation
+    for(int k = 0; k < tempTable.size(); k++){
+      tempRelation.addTuple(tempTable.get(k));
+    }
+    tempRelation.removeDuplicates();
+    return tempRelation;
+  }
+
+  public Relation intersect(Relation r2){
+    ArrayList<String> tempDomains = this.domains;
+    ArrayList<String> tempAttributes = this.attributes;
+    ArrayList<Tuple> tempTable = new ArrayList<Tuple>();
+
+    //iterate over the first relation and add clone
+    //of tuple to the tempTable
+    for(int r1Counter = 0; r1Counter < this.table.size(); r1Counter++){
+      for(int r2Counter = 0; r2Counter < r2.table.size(); r2Counter++){
+        if(this.table.get(r1Counter).equals(r2.table.get(r2Counter)))
+        tempTable.add(this.table.get(r1Counter).clone(this.attributes));
+      }
+    }
+
+    //Name of the new table
+    String unionName = this.name + "_INTERSECT_" + r2.name;
+
+    //calling relation
+    Relation tempRelation = new Relation(unionName, tempAttributes,tempDomains);
+
+    //add tuples to relation
+    for(int k = 0; k < tempTable.size(); k++){
+      tempRelation.addTuple(tempTable.get(k));
+    }
+    tempRelation.removeDuplicates();
+    return tempRelation;
+  }
+
+  public Relation minus(Relation r2){
+    ArrayList<String> tempDomains = this.domains;
+    ArrayList<String> tempAttributes = this.attributes;
+    ArrayList<Tuple> tempTable = new ArrayList<Tuple>();
+
+    //iterate over the first relation and add clone
+    //of tuple to the tempTable
+
+    for(int i = 0; i < this.table.size(); i++){
+      tempTable.add(this.table.get(i));
+    }
+
+    for(int r1Counter = 0; r1Counter < this.table.size(); r1Counter++){
+      for(int r2Counter = 0; r2Counter < r2.table.size(); r2Counter++){
+        System.out.println(r1Counter + ":" + r2Counter);
+        System.out.println("tempTable" + tempTable.size());
+        if(this.table.get(r1Counter).equals(r2.table.get(r2Counter))){
+          tempTable.remove(this.table.get(r1Counter));
         }
       }
     }
 
-    public boolean member(Tuple t){
-      for(int i = 0; i < this.table.size(); i++){
-        if(t.equals(this.table.get(i))){
-          return true;
-        }
-      }
-      return false;
+    // for(int tableSetup = 0; tableSetup < this.table.size(); tableSetup++){
+    //   if(){
+    //     tempTable.remove(tableSetup);
+    //     // tempTable.remove(r2.table.get(tableSetup).clone(this.attributes));
+    //     // System.out.println("" + r2.table.get(tableSetup));
+    //     // System.out.println(tempTable);
+    //     // System.out.println(tempTable.indexOf(r2.table.get(tableSetup)));
+    //   }
+    //     //tempTable.remove(tempTable.indexOf(r2.table.get(tableSetup)));
+    // }
+
+    // for(int tableSetup = 0; tableSetup < this.table.size(); tableSetup++){
+    //   tempTable.add(this.table.get(tableSetup).clone(this.attributes));
+    // }
+    //
+    //  for(int r1Counter = 0; r1Counter < this.table.size(); r1Counter++){
+    //    for(int r2Counter = r1Counter; r2Counter < r2.table.size(); r2Counter++){
+    //      System.out.println(r1Counter + ":" + r2Counter);
+    //      if(this.table.get(r1Counter).equals(r2.table.get(r2Counter))){
+    //       System.out.println(tempTable.get(r1Counter));
+    //       tempTable.remove(r1Counter);
+    //     }
+    //       System.out.println(this.table.get(r1Counter));
+    //       System.out.println(r2.table.get(r2Counter));
+    //       //System.out.println(tempTable);
+    //       System.out.println("++++++++");
+    //    }
+    // }
+    // Relation intersectRelation = this.intersect(r2);
+    // Relation finalRelation = this.intersect(intersectRelation);
+    // finalRelation.setName("REL1_MINUS_REL2");
+    //Name of the new table
+    String unionName = this.name + "_MINUS_" + r2.name;
+
+    //calling relation
+    Relation tempRelation = new Relation(unionName, tempAttributes,tempDomains);
+
+    //add tuples to relation
+    for(int k = 0; k < tempTable.size(); k++){
+      tempRelation.addTuple(tempTable.get(k));
+    }
+    tempRelation.removeDuplicates();
+    return tempRelation;
+  }
+
+  public Relation rename(ArrayList<String> cnames){
+    ArrayList<String> attrs = new ArrayList<String>();
+    ArrayList<String> doms = new ArrayList<String>();
+    for(int i = 0; i < cnames.size(); i++){
+      attrs.add(cnames.get(i));
     }
 
-    public Relation union(Relation r2){
-      ArrayList<String> tempDomains = this.domains;
-      ArrayList<String> tempAttributes = this.attributes;
-      ArrayList<Tuple> tempTable = new ArrayList<Tuple>();
-
-      //iterate over the first relation and add clone
-      //of tuple to the tempTable
-       for(int w = 0; w < this.table.size(); w++){
-        tempTable.add(this.table.get(w).clone(this.attributes));
-      }
-
-      //iterate over the second relation and add clone of
-      //tuple to the tempTable
-      for(int w = 0; w < r2.table.size(); w++){
-       tempTable.add(r2.table.get(w).clone(this.attributes));
-     }
-
-     //Name of the new table
-      String unionName = this.name + "_UNION_" + r2.name;
-
-      //calling relation
-      Relation tempRelation = new Relation(unionName, tempAttributes,tempDomains);
-
-      //add tuples to relation
-      for(int k = 0; k < tempTable.size(); k++){
-        tempRelation.addTuple(tempTable.get(k));
-      }
-      tempRelation.removeDuplicates();
-      return tempRelation;
+    for(int j = 0; j < this.domains.size(); j++){
+      doms.add(this.domains.get(j));
     }
 
-    public Relation intersect(Relation r2){
-      ArrayList<String> tempDomains = this.domains;
-      ArrayList<String> tempAttributes = this.attributes;
-      ArrayList<Tuple> tempTable = new ArrayList<Tuple>();
-
-      //iterate over the first relation and add clone
-      //of tuple to the tempTable
-       for(int r1Counter = 0; r1Counter < this.table.size(); r1Counter++){
-         for(int r2Counter = 0; r2Counter < r2.table.size(); r2Counter++){
-           if(this.table.get(r1Counter).equals(r2.table.get(r2Counter)))
-            tempTable.add(this.table.get(r1Counter).clone(this.attributes));
-         }
-      }
-
-     //Name of the new table
-      String unionName = this.name + "_INTERSECT_" + r2.name;
-
-      //calling relation
-      Relation tempRelation = new Relation(unionName, tempAttributes,tempDomains);
-
-      //add tuples to relation
-      for(int k = 0; k < tempTable.size(); k++){
-        tempRelation.addTuple(tempTable.get(k));
-      }
-      tempRelation.removeDuplicates();
-      return tempRelation;
+    Relation newRel = new Relation("rel", attrs, doms);
+    for(int k = 0; k < this.table.size(); k++){
+      newRel.addTuple(this.table.get(k).clone(this.attributes));
     }
 
-    public Relation minus(Relation r2){
-      ArrayList<String> tempDomains = this.domains;
-      ArrayList<String> tempAttributes = this.attributes;
-      ArrayList<Tuple> tempTable = new ArrayList<Tuple>();
+    return newRel;
 
-      //iterate over the first relation and add clone
-      //of tuple to the tempTable
+  }
 
-      for(int i = 0; i < this.table.size(); i++){
-        tempTable.add(this.table.get(i));
-      }
+  public Relation times(Relation r2){
+    ArrayList<String> attrs = new ArrayList<String>();
+    ArrayList<String> doms = new ArrayList<String>();
+    for(int i = 0 ; i < this.attributes.size(); i++){
+      if(this.attributes.indexOf(r2.attributes.get(i)) != -1)
+      attrs.add(this.name + "." + this.attributes.get(i));
+      else
+      attrs.add(this.attributes.get(i));
 
-      for(int r1Counter = 0; r1Counter < this.table.size(); r1Counter++){
-        for(int r2Counter = 0; r2Counter < r2.table.size(); r2Counter++){
-          System.out.println(r1Counter + ":" + r2Counter);
-          System.out.println("tempTable" + tempTable.size());
-          if(this.table.get(r1Counter).equals(r2.table.get(r2Counter))){
-           tempTable.remove(this.table.get(r1Counter));
-         }
-        }
-      }
-
-      // for(int tableSetup = 0; tableSetup < this.table.size(); tableSetup++){
-      //   if(){
-      //     tempTable.remove(tableSetup);
-      //     // tempTable.remove(r2.table.get(tableSetup).clone(this.attributes));
-      //     // System.out.println("" + r2.table.get(tableSetup));
-      //     // System.out.println(tempTable);
-      //     // System.out.println(tempTable.indexOf(r2.table.get(tableSetup)));
-      //   }
-      //     //tempTable.remove(tempTable.indexOf(r2.table.get(tableSetup)));
-      // }
-
-      // for(int tableSetup = 0; tableSetup < this.table.size(); tableSetup++){
-      //   tempTable.add(this.table.get(tableSetup).clone(this.attributes));
-      // }
-      //
-      //  for(int r1Counter = 0; r1Counter < this.table.size(); r1Counter++){
-      //    for(int r2Counter = r1Counter; r2Counter < r2.table.size(); r2Counter++){
-      //      System.out.println(r1Counter + ":" + r2Counter);
-      //      if(this.table.get(r1Counter).equals(r2.table.get(r2Counter))){
-      //       System.out.println(tempTable.get(r1Counter));
-      //       tempTable.remove(r1Counter);
-      //     }
-      //       System.out.println(this.table.get(r1Counter));
-      //       System.out.println(r2.table.get(r2Counter));
-      //       //System.out.println(tempTable);
-      //       System.out.println("++++++++");
-      //    }
-      // }
-      // Relation intersectRelation = this.intersect(r2);
-      // Relation finalRelation = this.intersect(intersectRelation);
-      // finalRelation.setName("REL1_MINUS_REL2");
-     //Name of the new table
-      String unionName = this.name + "_MINUS_" + r2.name;
-
-      //calling relation
-      Relation tempRelation = new Relation(unionName, tempAttributes,tempDomains);
-
-      //add tuples to relation
-      for(int k = 0; k < tempTable.size(); k++){
-        tempRelation.addTuple(tempTable.get(k));
-      }
-      tempRelation.removeDuplicates();
-      return tempRelation;
+      doms.add(this.domains.get(i));
     }
 
-    public Relation rename(ArrayList<String> cnames){
-      ArrayList<String> attrs = new ArrayList<String>();
-      ArrayList<String> doms = new ArrayList<String>();
-      for(int i = 0; i < cnames.size(); i++){
-        attrs.add(cnames.get(i));
+    for(int i = 0 ; i < this.attributes.size(); i++){
+      if(this.attributes.indexOf(r2.attributes.get(i)) != -1)
+      attrs.add(r2.name + "." + r2.attributes.get(i));
+      else
+      attrs.add(this.attributes.get(i));
+
+      doms.add(r2.domains.get(i));
+    }
+    String name = "";
+    String relName = this.name + "TIMES" + r2.name;
+    Relation newRel = new Relation(relName, attrs, doms);
+
+    for(int i = 0; i < this.table.size(); i++){
+      for(int j = 0; j < r2.table.size(); j++){
+        newRel.addTuple(this.table.get(i).concatenate(r2.table.get(j),attrs, doms));
       }
-
-      for(int j = 0; j < this.domains.size(); j++){
-        doms.add(this.domains.get(j));
-      }
-
-      Relation newRel = new Relation("rel", attrs, doms);
-      for(int k = 0; k < this.table.size(); k++){
-        newRel.addTuple(this.table.get(k).clone(this.attributes));
-      }
-
-      return newRel;
-
     }
 
-    public Relation times(Relation r2){
-      ArrayList<String> attrs = new ArrayList<String>();
-      ArrayList<String> doms = new ArrayList<String>();
-      for(int i = 0 ; i < this.attributes.size(); i++){
-        if(this.attributes.indexOf(r2.attributes.get(i)) != -1)
-          attrs.add(this.name + "." + this.attributes.get(i));
-         else
-        attrs.add(this.attributes.get(i));
-
-        doms.add(this.domains.get(i));
-      }
-
-      for(int i = 0 ; i < this.attributes.size(); i++){
-        if(this.attributes.indexOf(r2.attributes.get(i)) != -1)
-          attrs.add(r2.name + "." + r2.attributes.get(i));
-         else
-        attrs.add(this.attributes.get(i));
-
-        doms.add(r2.domains.get(i));
-      }
-      String name = "";
-      String relName = this.name + "TIMES" + r2.name;
-      Relation newRel = new Relation(relName, attrs, doms);
-
-      for(int i = 0; i < this.table.size(); i++){
-        for(int j = 0; j < r2.table.size(); j++){
-          newRel.addTuple(this.table.get(i).concatenate(r2.table.get(j),attrs, doms));
-        }
-      }
-
-      return newRel;
+    return newRel;
 
   }
 
@@ -313,11 +313,21 @@ public class Relation {
 
     for(Tuple t : this.table){
       rel.table.add(t.project(cnames));
-    //  System.out.println(rel.table);
+      //  System.out.println(rel.table);
     }
     rel.removeDuplicates();
     return rel;
   }
 
+  public Relation select(String lopType, String lopValue, String comparison, String ropType, String ropValue) {
+    String relName = "SELECT_" + lopValue + "_" + comparison + "_" + ropValue;
+    Relation tempRel = new Relation(relName, this.attributes, this.domains);
+    for(int i = 0; i < this.table.size(); i++ ){
+      if(this.table.get(i).select(lopType, lopValue, comparison, ropType, ropValue)){
+        tempRel.table.add(this.table.get(i).clone(this.attributes));
+      }
+    }
+    return tempRel;
+  }
 
 }
