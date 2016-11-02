@@ -49,10 +49,6 @@ public class Tuple {
     } else{
       for(int i = 0; i < this.tuple.size(); i++){
         if(!this.tuple.get(i).equals(compareTuple.tuple.get(i))){
-          // System.out.println(this.tuple);
-          // System.out.println();
-          // System.out.println(compareTuple.tuple);
-          //  System.out.println("gotii");
           return false;
         }
       }
@@ -67,24 +63,20 @@ public class Tuple {
       switch(this.domains.get(i)){
         case "INTEGER":   duplicatedDomain.add("INTEGER");
         duplicatedTuple.add((Integer)this.tuple.get(i));
-        //System.out.println("Int");
         break;
 
         case "VARCHAR":   duplicatedDomain.add("VARCHAR");
         duplicatedTuple.add((String)this.tuple.get(i));
-        //System.out.println("String");
         break;
 
         case "DECIMAL":   duplicatedDomain.add("DECIMAL");
         duplicatedTuple.add((Double)this.tuple.get(i));
-        //System.out.println("Double");
         break;
 
       }
     }
     Tuple t = new Tuple(attr,duplicatedDomain);
     t.tuple = duplicatedTuple;
-    //System.out.println(t);
     return t;
   }
 
@@ -99,7 +91,6 @@ public class Tuple {
     for(int j = 0; j < t2.tuple.size(); j++){
       tempTuple.tuple.add(t2.tuple.get(j));
     }
-    System.out.println(tempTuple);
     return tempTuple;
   }
 
@@ -126,116 +117,162 @@ public class Tuple {
     int i;
     switch(types) {
       case "numnum":  leftOperandNumber = Double.parseDouble(lopValue);
-                      rightOperandNumber = Double.parseDouble(ropValue);
-                      switch(comparison) {
-                        case "<": return leftOperandNumber < rightOperandNumber;
-                        case ">": return leftOperandNumber > rightOperandNumber;
-                        case ">=":return leftOperandNumber >= rightOperandNumber;
-                        case "<=":return leftOperandNumber <= rightOperandNumber;
-                        case "=": return leftOperandNumber == rightOperandNumber;
-                        case "<>":return leftOperandNumber != rightOperandNumber;
-                        default: return false;
-                      }
+      rightOperandNumber = Double.parseDouble(ropValue);
+      switch(comparison) {
+        case "<": return leftOperandNumber < rightOperandNumber;
+        case ">": return leftOperandNumber > rightOperandNumber;
+        case ">=":return leftOperandNumber >= rightOperandNumber;
+        case "<=":return leftOperandNumber <= rightOperandNumber;
+        case "=": return leftOperandNumber == rightOperandNumber;
+        case "<>":return leftOperandNumber != rightOperandNumber;
+        default: return false;
+      }
       case "strstr":  leftOperandString = lopValue;
-                      rightOperandString = ropValue;
-                      switch(comparison) {
-                        case "<": return false;
-                        case ">": return false;
-                        case ">=":return false;
-                        case "<=":return false;
-                        case "=": return leftOperandString.equals(rightOperandString);
-                        case "<>":return !leftOperandString.equals(rightOperandString);
-                        default: return false;
-                      }
+      rightOperandString = ropValue;
+      switch(comparison) {
+        case "<": return false;
+        case ">": return false;
+        case ">=":return false;
+        case "<=":return false;
+        case "=": return leftOperandString.equals(rightOperandString);
+        case "<>":return !leftOperandString.equals(rightOperandString);
+        default: return false;
+      }
       case "colnum":  rightOperandNumber = Double.parseDouble(ropValue);
-                      columnName = lopValue;
-                      if(this.domains.get(this.attributes.indexOf(columnName)) == "DECIMAL"){
-                        d = (Double)(this.tuple.get(this.attributes.indexOf(columnName)));
-                        switch(comparison) {
-                          case "<": return d < rightOperandNumber;
-                          case ">": return d > rightOperandNumber;
-                          case ">=":return d >= rightOperandNumber;
-                          case "<=":return d <= rightOperandNumber;
-                          case "=": return d == rightOperandNumber;
-                          case "<>":return d != rightOperandNumber;
-                          default: return false;
-                        }
-                      } else {
-                        i = (Integer)(this.tuple.get(this.attributes.indexOf(columnName)));
-                        switch(comparison) {
-                          case "<": return i < rightOperandNumber;
-                          case ">": return i > rightOperandNumber;
-                          case ">=":return i >= rightOperandNumber;
-                          case "<=":return i <= rightOperandNumber;
-                          case "=": return i == rightOperandNumber;
-                          case "<>":return i != rightOperandNumber;
-                          default: return false;
-                        }
-                      }
+      columnName = lopValue;
+      if(this.domains.get(this.attributes.indexOf(columnName)) == "DECIMAL"){
+        d = (Double)(this.tuple.get(this.attributes.indexOf(columnName)));
+        switch(comparison) {
+          case "<": return d < rightOperandNumber;
+          case ">": return d > rightOperandNumber;
+          case ">=":return d >= rightOperandNumber;
+          case "<=":return d <= rightOperandNumber;
+          case "=": return d == rightOperandNumber;
+          case "<>":return d != rightOperandNumber;
+          default: return false;
+        }
+      } else {
+        i = (Integer)(this.tuple.get(this.attributes.indexOf(columnName)));
+        switch(comparison) {
+          case "<": return i < rightOperandNumber;
+          case ">": return i > rightOperandNumber;
+          case ">=":return i >= rightOperandNumber;
+          case "<=":return i <= rightOperandNumber;
+          case "=": return i == rightOperandNumber;
+          case "<>":return i != rightOperandNumber;
+          default: return false;
+        }
+      }
       case "colstr":  rightOperandString = ropValue;
-                      columnName = lopValue;
-                      s = (String)(this.tuple.get(this.attributes.indexOf(columnName)));
-                      switch(comparison) {
-                        case "<": return false;
-                        case ">": return false;
-                        case ">=":return false;
-                        case "<=":return false;
-                        case "=": return s.equals(rightOperandString);
-                        case "<>":return !s.equals(rightOperandString);
-                        default: return false;
-                      }
+      columnName = lopValue;
+      s = (String)(this.tuple.get(this.attributes.indexOf(columnName)));
+      switch(comparison) {
+        case "<": return false;
+        case ">": return false;
+        case ">=":return false;
+        case "<=":return false;
+        case "=": return s.equals(rightOperandString);
+        case "<>":return !s.equals(rightOperandString);
+        default: return false;
+      }
       case "numcol":  leftOperandNumber = Double.parseDouble(lopValue);
-                      columnName = ropValue;
-                      if(this.domains.get(this.attributes.indexOf(columnName)) == "DECIMAL"){
-                        d = (Double)(this.tuple.get(this.attributes.indexOf(columnName)));
-                        switch(comparison) {
-                          case "<": return leftOperandNumber < d;
-                          case ">": return leftOperandNumber > d;
-                          case ">=":return leftOperandNumber >= d;
-                          case "<=":return leftOperandNumber <= d;
-                          case "=": return leftOperandNumber == d;
-                          case "<>":return leftOperandNumber != d;
-                          default: return false;
-                        }
-                      } else {
-                        i = (Integer)(this.tuple.get(this.attributes.indexOf(columnName)));
-                        switch(comparison) {
-                          case "<": return leftOperandNumber < i;
-                          case ">": return leftOperandNumber > i;
-                          case ">=":return leftOperandNumber >= i;
-                          case "<=":return leftOperandNumber <= i;
-                          case "=": return leftOperandNumber == i;
-                          case "<>":return leftOperandNumber != i;
-                          default: return false;
-                        }
-                      }
+      columnName = ropValue;
+      if(this.domains.get(this.attributes.indexOf(columnName)) == "DECIMAL"){
+        d = (Double)(this.tuple.get(this.attributes.indexOf(columnName)));
+        switch(comparison) {
+          case "<": return leftOperandNumber < d;
+          case ">": return leftOperandNumber > d;
+          case ">=":return leftOperandNumber >= d;
+          case "<=":return leftOperandNumber <= d;
+          case "=": return leftOperandNumber == d;
+          case "<>":return leftOperandNumber != d;
+          default: return false;
+        }
+      } else {
+        i = (Integer)(this.tuple.get(this.attributes.indexOf(columnName)));
+        switch(comparison) {
+          case "<": return leftOperandNumber < i;
+          case ">": return leftOperandNumber > i;
+          case ">=":return leftOperandNumber >= i;
+          case "<=":return leftOperandNumber <= i;
+          case "=": return leftOperandNumber == i;
+          case "<>":return leftOperandNumber != i;
+          default: return false;
+        }
+      }
       case "strcol":  leftOperandString = lopValue;
-                      columnName = ropValue;
-                      s = (String)(this.tuple.get(this.attributes.indexOf(columnName)));
-                      switch(comparison) {
-                        case "<": return false;
-                        case ">": return false;
-                        case ">=":return false;
-                        case "<=":return false;
-                        case "=": return leftOperandString.equals(s);
-                        case "<>":return !leftOperandString.equals(s);
-                        default: return false;
-                      }
+      columnName = ropValue;
+      s = (String)(this.tuple.get(this.attributes.indexOf(columnName)));
+      switch(comparison) {
+        case "<": return false;
+        case ">": return false;
+        case ">=":return false;
+        case "<=":return false;
+        case "=": return leftOperandString.equals(s);
+        case "<>":return !leftOperandString.equals(s);
+        default: return false;
+      }
       case "colcol":    rightColumn = (String)(this.tuple.get(this.attributes.indexOf(ropValue)));
-                        leftColumn = (String)(this.tuple.get(this.attributes.indexOf(lopValue)));
-                        switch(comparison) {
-                          case "<": return false;
-                          case ">": return false;
-                          case ">=":return false;
-                          case "<=":return false;
-                          case "=": return rightColumn.equals(leftColumn);
-                          case "<>":return !rightColumn.equals(leftColumn);
-                          default: return false;
-                        }
+      leftColumn = (String)(this.tuple.get(this.attributes.indexOf(lopValue)));
+      switch(comparison) {
+        case "<": return false;
+        case ">": return false;
+        case ">=":return false;
+        case "<=":return false;
+        case "=": return rightColumn.equals(leftColumn);
+        case "<>":return !rightColumn.equals(leftColumn);
+        default: return false;
+      }
 
       default: return false;
     }
 
+
+  }
+
+  public Tuple join(Tuple t2){
+    ArrayList<String> attr = new ArrayList<String>();
+    ArrayList<String> doms = new ArrayList<String>();
+    Tuple tempTuple = new Tuple(attr, doms);
+
+    if(this.tuple.indexOf(t2.tuple.get(0)) != -1){
+      for(int i = 0; i < this.tuple.size(); i++){
+        if(this.tuple.get(i) != t2.tuple.get(0)){
+          switch(this.domains.get(i)){
+            case "DECIMAL": tempTuple.tuple.add(this.tuple.get(i));
+            break;
+            case "INTEGER": tempTuple.tuple.add(this.tuple.get(i));
+            break;
+            case "VARCHAR": tempTuple.tuple.add(this.tuple.get(i));
+            break;
+            default: System.out.println("that didn't work");
+          }
+
+          attr.add(this.attributes.get(i));
+          doms.add(this.domains.get(i));
+        }
+      }
+
+      for(int i = 0; i < t2.tuple.size(); i++){
+        if(t2.tuple.get(i) != t2.tuple.get(0)){
+          switch(this.domains.get(i)){
+            case "DECIMAL": tempTuple.tuple.add(t2.tuple.get(i));
+            break;
+            case "INTEGER": tempTuple.tuple.add(t2.tuple.get(i));
+            break;
+            case "VARCHAR": tempTuple.tuple.add(t2.tuple.get(i));
+            break;
+            default: System.out.println("that didn't work");
+          }
+
+          attr.add(t2.attributes.get(i));
+          doms.add(t2.domains.get(i));
+        }
+      }
+
+      return tempTuple;
+
+    } else return null;
 
   }
 

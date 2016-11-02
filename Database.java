@@ -53,8 +53,6 @@ public class Database {
       System.out.print(relations.keySet().toArray()[i] + "");
       System.out.print("(");
       r = relations.get(relations.keySet().toArray()[i]);
-      //System.out.println("&7777&&");
-      //System.out.println("787777");
       r.displaySchema();
       System.out.print(")\n");
     }

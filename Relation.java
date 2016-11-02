@@ -42,7 +42,6 @@ public class Relation {
 
   // Print relational schema to screen.
   public void displaySchema() {
-    //System.out.print(attributes.size());
     for(int i = 0; i < attributes.size(); i++){
       System.out.print(attributes.get(i) + ":" + domains.get(i));
       if(i != attributes.size()-1)
@@ -78,10 +77,8 @@ public class Relation {
   public String toString() {
     String s = "";
     s += name + "(";
-    //System.out.println(this.attributes.size());
     for(int w = 0; w < attributes.size(); w++){
       s += attributes.get(w) + ":" + domains.get(w);
-      //System.out.println(attributes.get(w) + ":" + domains.get(w));
       if(w != attributes.size()-1){
         s+=",";
       }
@@ -189,45 +186,12 @@ public class Relation {
 
     for(int r1Counter = 0; r1Counter < this.table.size(); r1Counter++){
       for(int r2Counter = 0; r2Counter < r2.table.size(); r2Counter++){
-        System.out.println(r1Counter + ":" + r2Counter);
-        System.out.println("tempTable" + tempTable.size());
         if(this.table.get(r1Counter).equals(r2.table.get(r2Counter))){
           tempTable.remove(this.table.get(r1Counter));
         }
       }
     }
 
-    // for(int tableSetup = 0; tableSetup < this.table.size(); tableSetup++){
-    //   if(){
-    //     tempTable.remove(tableSetup);
-    //     // tempTable.remove(r2.table.get(tableSetup).clone(this.attributes));
-    //     // System.out.println("" + r2.table.get(tableSetup));
-    //     // System.out.println(tempTable);
-    //     // System.out.println(tempTable.indexOf(r2.table.get(tableSetup)));
-    //   }
-    //     //tempTable.remove(tempTable.indexOf(r2.table.get(tableSetup)));
-    // }
-
-    // for(int tableSetup = 0; tableSetup < this.table.size(); tableSetup++){
-    //   tempTable.add(this.table.get(tableSetup).clone(this.attributes));
-    // }
-    //
-    //  for(int r1Counter = 0; r1Counter < this.table.size(); r1Counter++){
-    //    for(int r2Counter = r1Counter; r2Counter < r2.table.size(); r2Counter++){
-    //      System.out.println(r1Counter + ":" + r2Counter);
-    //      if(this.table.get(r1Counter).equals(r2.table.get(r2Counter))){
-    //       System.out.println(tempTable.get(r1Counter));
-    //       tempTable.remove(r1Counter);
-    //     }
-    //       System.out.println(this.table.get(r1Counter));
-    //       System.out.println(r2.table.get(r2Counter));
-    //       //System.out.println(tempTable);
-    //       System.out.println("++++++++");
-    //    }
-    // }
-    // Relation intersectRelation = this.intersect(r2);
-    // Relation finalRelation = this.intersect(intersectRelation);
-    // finalRelation.setName("REL1_MINUS_REL2");
     //Name of the new table
     String unionName = this.name + "_MINUS_" + r2.name;
 
@@ -298,7 +262,6 @@ public class Relation {
 
   public Relation project(ArrayList<String> cnames){
     ArrayList<String> attr = cnames;
-    System.out.println(cnames);
     ArrayList<String> doms = new ArrayList<String>();
 
     for(int i = 0; i < cnames.size(); i++){
@@ -313,7 +276,6 @@ public class Relation {
 
     for(Tuple t : this.table){
       rel.table.add(t.project(cnames));
-      //  System.out.println(rel.table);
     }
     rel.removeDuplicates();
     return rel;
@@ -328,6 +290,33 @@ public class Relation {
       }
     }
     return tempRel;
+  }
+
+  public Relation join(Relation r2){
+    ArrayList<String> attr = new ArrayList<String>();
+    ArrayList<String> doms = new ArrayList<String>();
+    for(int i = 0; i < this.attributes.size(); i++){
+      attr.add(this.attributes.get(i));
+      doms.add(this.domains.get(i));
+    }
+    for(int i = 0; i < r2.attributes.size(); i++){
+      if(attr.indexOf(r2.attributes.get(i)) == -1){
+        attr.add(r2.attributes.get(i));
+        doms.add(r2.domains.get(i));
+      }
+    }
+
+    Relation tempRel = new Relation("name", attr, doms);
+    for(int i = 0; i < this.table.size(); i++){
+      for(int j = 0; j < r2.table.size(); j++){
+        Tuple t1 = this.table.get(i).clone(this.attributes);
+        Tuple t2 = r2.table.get(j).clone(r2.attributes);
+        if(t1.join(t2) != null)
+        tempRel.addTuple(t1.join(t2));
+      }
+    }
+    return tempRel;
+
   }
 
 }
